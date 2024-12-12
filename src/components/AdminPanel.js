@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import MapComponent from "./MapComponent"; // Import MapComponent
+import SearchBar from "./SearchBar"; // Import SearchBar
 import "./AdminPanel.css";
 
 const AdminPanel = () => {
@@ -10,6 +11,7 @@ const AdminPanel = () => {
     address: "",
   });
   const [profiles, setProfiles] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // State to manage search query
   const [currentLatLng, setCurrentLatLng] = useState(null); // Store selected lat/lng
 
   // Handle input changes
@@ -69,6 +71,11 @@ const AdminPanel = () => {
     setCurrentLatLng({ lat, lng }); // Set selected lat/lng
   };
 
+  // Filter profiles based on the search query
+  const filteredProfiles = profiles.filter((profile) =>
+    profile.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="admin-panel">
       <h1>Admin Panel</h1>
@@ -110,14 +117,19 @@ const AdminPanel = () => {
         <button onClick={handleAddProfile}>Add Profile</button>
       </div>
 
+      {/* Search bar for profiles */}
+      <div className="search-bar-container">
+        <SearchBar onSearch={setSearchQuery} />
+      </div>
+
       {/* Existing Profiles */}
       <div className="profiles-container">
         <h2>Existing Profiles</h2>
-        {profiles.length === 0 ? (
-          <p>No profiles available.</p>
+        {filteredProfiles.length === 0 ? (
+          <p>No profiles found.</p>
         ) : (
           <div className="profiles-grid">
-            {profiles.map((profile) => (
+            {filteredProfiles.map((profile) => (
               <div key={profile.id} className="profile-card">
                 <img
                   src={URL.createObjectURL(profile.photo)}
