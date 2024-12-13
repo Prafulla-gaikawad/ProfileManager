@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import MapComponent from "./MapComponent"; // Import MapComponent
-import SearchBar from "./SearchBar"; // Import SearchBar
+import MapComponent from "./MapComponent";
+import SearchBar from "./SearchBar";
 import "./AdminPanel.css";
 
 const AdminPanel = () => {
@@ -11,26 +11,23 @@ const AdminPanel = () => {
     address: "",
   });
   const [profiles, setProfiles] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // State to manage search query
-  const [currentLatLng, setCurrentLatLng] = useState(null); // Store selected lat/lng
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentLatLng, setCurrentLatLng] = useState(null);
 
-  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProfile((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle photo file input
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setNewProfile((prev) => ({ ...prev, photo: file }));
   };
 
-  // Function to add a new profile
   const handleAddProfile = async () => {
     const geocodeURL = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
       newProfile.address
-    )}&key=124c0269c77f44108bcfd2574f090cbd`; // Use your OpenCage API Key
+    )}&key=124c0269c77f44108bcfd2574f090cbd`;
 
     try {
       const response = await fetch(geocodeURL);
@@ -66,12 +63,10 @@ const AdminPanel = () => {
     }
   };
 
-  // Function to handle the summary button click and show map
   const handleSummaryClick = (lat, lng) => {
-    setCurrentLatLng({ lat, lng }); // Set selected lat/lng
+    setCurrentLatLng({ lat, lng });
   };
 
-  // Filter profiles based on the search query
   const filteredProfiles = profiles.filter((profile) =>
     profile.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -117,12 +112,10 @@ const AdminPanel = () => {
         <button onClick={handleAddProfile}>Add Profile</button>
       </div>
 
-      {/* Search bar for profiles */}
       <div className="search-bar-container">
         <SearchBar onSearch={setSearchQuery} />
       </div>
 
-      {/* Existing Profiles */}
       <div className="profiles-container">
         <h2>Existing Profiles</h2>
         {filteredProfiles.length === 0 ? (
@@ -130,7 +123,11 @@ const AdminPanel = () => {
         ) : (
           <div className="profiles-grid">
             {filteredProfiles.map((profile) => (
-              <div key={profile.id} className="profile-card">
+              <div
+                key={profile.id}
+                className="profile-card"
+                style={{ cursor: "pointer" }}
+              >
                 <img
                   src={URL.createObjectURL(profile.photo)}
                   alt="Profile"
@@ -154,18 +151,17 @@ const AdminPanel = () => {
         )}
       </div>
 
-      {/* Show map if a profile is clicked */}
       {currentLatLng && (
         <div
           style={{
-            width: "100%", // Adjust the width to fit the parent container
-            maxWidth: "600px", // Limit the max width for better layout
-            margin: "20px auto", // Center the box horizontally with margin
-            padding: "10px", // Add some padding inside the container
-            border: "1px solid #ccc", // Optional: Add a border for the container
-            borderRadius: "8px", // Optional: Rounded corners for aesthetics
-            backgroundColor: "#f9f9f9", // Optional: Background color for contrast
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Optional: Add a subtle shadow
+            width: "100%",
+            maxWidth: "600px",
+            margin: "20px auto",
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            backgroundColor: "#f9f9f9",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           }}
         >
           <h3 style={{ textAlign: "center", marginBottom: "10px" }}>

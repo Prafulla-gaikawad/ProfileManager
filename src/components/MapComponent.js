@@ -7,14 +7,12 @@ const MapComponent = ({ lat, lng }) => {
     const mapContainer = document.getElementById("map");
 
     if (mapContainer) {
-      // Initialize the map
       const map = L.map(mapContainer, {
         center: [lat, lng],
         zoom: 14,
         scrollWheelZoom: false,
       });
 
-      // Use Stadia Maps tile layer (Free)
       L.tileLayer(
         "https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png",
         {
@@ -25,18 +23,15 @@ const MapComponent = ({ lat, lng }) => {
         }
       ).addTo(map);
 
-      // Add a marker at the specified location
       L.marker([lat, lng])
         .addTo(map)
         .bindPopup(`<b>Location</b><br />Lat: ${lat}, Lng: ${lng}`)
         .openPopup();
 
-      // Adjust map size
       setTimeout(() => {
         map.invalidateSize();
       }, 200);
 
-      // Cleanup on unmount
       return () => {
         map.remove();
       };
